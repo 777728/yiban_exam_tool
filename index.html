@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="校纪校规考试成绩数据整理前后对比：原始 CSV 与结构化汇总的可视化对照" />
+    <meta name="author" content="易班技术部" />
+    <title>数据整理前后对比 · 校纪校规考试成绩</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- 字体（可选，加载失败时自动回退系统字体） -->
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css" />
+    <!-- 模板样式（Clean Blog，含 Bootstrap） -->
+    <link href="css/styles.css" rel="stylesheet" />
+    <!-- 对比页自定义样式 -->
+    <link href="css/compare.css" rel="stylesheet" />
+    <!-- 代码高亮主题（本地） -->
+    <link href="css/highlight.css" rel="stylesheet" />
+</head>
+<body>
+    <!-- 导航 -->
+    <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
+        <div class="container px-4 px-lg-5">
+            <a class="navbar-brand" href="#top">成绩整理对比</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+                    aria-controls="navbarResponsive" aria-expanded="false" aria-label="切换导航">
+                菜单
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto py-4 py-lg-0">
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="#overview">指标概览</a></li>
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="#compare">前后对比</a></li>
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="#process">处理流程</a></li>
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="#source">源代码</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 首屏 -->
+    <header class="masthead" style="background-image: url('assets/img/home-bg.jpg')" id="top">
+        <div class="container position-relative px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-9 col-xl-8">
+                    <div class="site-heading">
+                        <span class="hero-eyebrow">数据整理前后对比</span>
+                        <h1>从「一张乱表」<br class="d-none d-md-block" />到「一套结构化汇总」</h1>
+                        <span class="subheading">云南大学 2026 级研究生 / 博士生校纪校规考试成绩 · 整理效果对照</span>
+                        <div class="hero-pill">原始 91 条 → 结构化 31 张表</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 指标概览 -->
+    <section class="data-section" id="overview">
+        <div class="container px-4 px-lg-5">
+            <div class="section-head">
+                <h2>关键指标概览</h2>
+                <p>一次考试导出的原始文件，经清洗、分流与统计后得到可直接归档的结果。及格线为 <strong>90 分</strong>。</p>
+            </div>
+            <div class="stat-grid">
+                <div class="metric">
+                    <div class="num">91<small>条</small></div>
+                    <div class="label">原始 CSV 记录</div>
+                    <span class="tag">单表 · 混杂</span>
+                </div>
+                <div class="metric">
+                    <div class="num">86<small>人</small></div>
+                    <div class="label">2026 级有效记录</div>
+                    <span class="tag">硕 + 博</span>
+                </div>
+                <div class="metric ok">
+                    <div class="num">90.70<small>%</small></div>
+                    <div class="label">通过率（通过 78 / 未通过 8）</div>
+                    <span class="tag">按 90 分及格线</span>
+                </div>
+                <div class="metric">
+                    <div class="num">5<small>条</small></div>
+                    <div class="label">分流处理（往届 1 + 错考/异常 4）</div>
+                    <span class="tag">单独成表</span>
+                </div>
+                <div class="metric">
+                    <div class="num">28<small>个</small></div>
+                    <div class="label">覆盖学院数</div>
+                    <span class="tag">按学院分表</span>
+                </div>
+            </div>
+            <div class="callout mt-4">
+                <strong>一句话结论：</strong>原始文件只有一张扁平表、且存在编码与格式问题；整理后形成「1 张通过率统计表 + 28 张学院名单 + 往届补考/错考名单」，通过率、学院维度等指标可直接量化上报。
+            </div>
+        </div>
+    </section>
+
+    <!-- 前后对比 -->
+    <section class="data-section alt" id="compare">
+        <div class="container px-4 px-lg-5">
+            <div class="section-head">
+                <h2>整理前 vs 整理后</h2>
+                <p>左侧为导出的原始形态（已脱敏展示），右侧为整理后的结构化结果。</p>
+            </div>
+
+            <div class="compare-grid">
+                <!-- 整理前 -->
+                <div class="panel">
+                    <div class="panel-head">
+                        <span class="title">整理前 · 原始 CSV</span>
+                        <span class="badge-soft badge-before">单表 / 需手工统计</span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-scroll">
+                            <table class="mock-table">
+                                <thead>
+                                    <tr><th>姓名</th><th>学号</th><th>学院</th><th>成绩/百分比</th><th>状态</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>张*</td><td>`12026101037</td><td>材料与能源学院</td><td>100 / 100.0%</td><td>已完成</td></tr>
+                                    <tr><td>李*</td><td>`22026107047</td><td>信息学院</td><td>88 / 88.0%</td><td>已完成</td></tr>
+                                    <tr><td>王*</td><td>`12026114014</td><td>历史与档案学院</td><td>0 / 0.0%</td><td>未开始</td></tr>
+                                    <tr><td>—</td><td>F1202600072</td><td>—</td><td>—</td><td>异常</td></tr>
+                                    <tr class="garbled"><td colspan="5">瀛︾敓锛氱紪鐮佹贩涔� · 直接打开易乱码</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="note">单表 91 行 · 硕 / 博 / 本科 / 异常混杂 · 学号带反引号 · 无通过率、无学院拆分。</p>
+                    </div>
+                </div>
+
+                <!-- 整理后 -->
+                <div class="panel">
+                    <div class="panel-head">
+                        <span class="title">整理后 · 结构化汇总</span>
+                        <span class="badge-soft badge-after">31 张表 / 可直接上报</span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-scroll">
+                            <table class="mock-table after-table">
+                                <thead>
+                                    <tr><th>统计口径</th><th>参加</th><th>通过</th><th>未通过</th><th>通过率</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>参加考试（含往届）</td><td>87</td><td>78</td><td>9</td><td><strong>89.66%</strong></td></tr>
+                                    <tr><td>2026 级研究生</td><td>86</td><td>78</td><td>8</td><td><strong class="ok-text">90.70%</strong></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="chips">
+                            <span class="chip">附件1 通过率统计表 <b>×1</b></span>
+                            <span class="chip">分学院名单 <b>×28</b></span>
+                            <span class="chip">往届补考名单 <b>×1</b></span>
+                            <span class="chip">错考/异常名单 <b>×1</b></span>
+                        </div>
+                        <p class="note">按学号规则识别类型与年级，自动分流并生成统计口径，学院维度可直接筛选。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="delta-strip">
+                <div class="delta-item"><span class="delta-k">表格数量</span><span class="delta-v">1 <span class="arrow">→</span> 31</span></div>
+                <div class="delta-item"><span class="delta-k">可量化指标</span><span class="delta-v">无 <span class="arrow">→</span> 通过率 / 学院维度</span></div>
+                <div class="delta-item"><span class="delta-k">人工核对</span><span class="delta-v">全表通读 <span class="arrow">→</span> 分流清单</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 处理流程 -->
+    <section class="data-section" id="process">
+        <div class="container px-4 px-lg-5">
+            <div class="section-head">
+                <h2>问题 → 处理 → 结果</h2>
+                <p>原始数据常见 6 类问题，按下表逐项处理，保证结果可追溯。</p>
+            </div>
+            <div class="table-scroll">
+                <table class="flow-table">
+                    <thead>
+                        <tr><th>原始问题</th><th>处理方式</th><th>结果</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>编码为 GBK，直接打开易乱码</td><td>按 GBK 正确解码读取</td><td>中文人名、学院正常显示</td></tr>
+                        <tr><td>学号带反引号前缀（如&nbsp;`12026…）</td><td>清洗前缀并校验长度</td><td>学号可精确匹配</td></tr>
+                        <tr><td>硕士 / 博士 / 本科 / 异常混杂</td><td>按学号首位与年份规则识别</td><td>类型清晰分流</td></tr>
+                        <tr><td>年级不等于 2026（往届考生）</td><td>归入往届补考名单</td><td>1 人单独成表</td></tr>
+                        <tr><td>无法识别或考错试卷</td><td>归入问题 / 错考名单</td><td>4 人可追溯</td></tr>
+                        <tr><td>没有统一统计口径</td><td>生成通过率统计表 + 分学院表</td><td>通过率、人数可量化</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- 源代码可视化 -->
+    <section class="data-section alt" id="source">
+        <div class="container px-4 px-lg-5">
+            <div class="section-head">
+                <h2>源代码可视化</h2>
+                <p>这段程序就是把「整理前」变成「整理后」的加工过程：读取 → 清洗识别 → 分流 → 生成汇总。</p>
+            </div>
+
+            <div class="pipeline">
+                <div class="pipe-step"><span class="pipe-no">01</span><div><h3>读取</h3><p>自动识别 GBK 编码，容错映射姓名 / 学号 / 学院 / 成绩列。</p></div></div>
+                <div class="pipe-step"><span class="pipe-no">02</span><div><h3>清洗识别</h3><p>去掉学号反引号，按 11 位规则识别本科 / 硕士 / 博士与年级。</p></div></div>
+                <div class="pipe-step"><span class="pipe-no">03</span><div><h3>分流</h3><p>本年有效、往届补考、错考 / 异常三路归位。</p></div></div>
+                <div class="pipe-step"><span class="pipe-no">04</span><div><h3>生成汇总</h3><p>分学院建表、写通过率统计表、输出统计摘要。</p></div></div>
+            </div>
+
+            <div class="code-view">
+                <div class="code-bar">
+                    <span class="code-file"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span> convert_exam.py</span>
+                    <span class="code-meta">Python · 492 行</span>
+                    <button class="code-copy" id="copyBtn" type="button">复制代码</button>
+                </div>
+                <pre class="code-pre"><code class="language-python" id="srcCode"># -*- coding: utf-8 -*-
+&quot;&quot;&quot;
+校纪校规考试成绩汇总转换工具
+================================
+把易班导出的 ExamCompletionReport 类 CSV（GBK 编码）按
+&quot;云南大学2026级第一次校纪校规考试成绩汇总&quot;模板结构，
+转换为 Excel 汇总文件夹。
+
+用法（命令行）:
+    python convert_exam.py --csv ExamCompletionReport20261019234636.csv \
+        --type grad --folder &quot;云南大学2026级第一次研究生博士生校纪校规考试成绩汇总&quot;
+
+    --type:  undergrad | grad
+             （本科生 / 研究生博士生；研究生、博士均可归入 grad）
+    --folder: 输出文件夹名称（同时也是表头生成的依据）
+    --out:    输出根目录（默认当前目录）
+    --pass-line: 通过分数线，默认 90
+
+也可作为模块调用:
+    from convert_exam import process_exam
+    result = process_exam(csv_path, exam_type=&quot;grad&quot;,
+                          folder_name=&quot;云南大学2026级第一次研究生博士生校纪校规考试成绩汇总&quot;)
+&quot;&quot;&quot;
+
+import os
+import re
+import csv
+import argparse
+
+from openpyxl import Workbook
+from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
+from openpyxl.utils import get_column_letter
+
+# ----------------------------- 常量 -----------------------------
+PASS_LINE = 90          # 通过分数线（依据模板：通过最低 90，未通过最高 88）
+EXAM_WORD = &quot;校规校纪考试&quot;   # 考试名称用词
+
+# 表头四列（固定顺序：姓名、学号、学院、成绩）
+COLS = [&quot;姓名&quot;, &quot;学号&quot;, &quot;学院&quot;, &quot;成绩&quot;]
+
+# 样式
+TITLE_FONT = Font(name=&quot;微软雅黑&quot;, size=14, bold=True)
+HEAD_FONT = Font(name=&quot;微软雅黑&quot;, size=11, bold=True, color=&quot;FFFFFF&quot;)
+HEAD_FILL = PatternFill(&quot;solid&quot;, fgColor=&quot;4472C4&quot;)
+TITLE_FILL = PatternFill(&quot;solid&quot;, fgColor=&quot;D9E1F2&quot;)
+CENTER = Alignment(horizontal=&quot;center&quot;, vertical=&quot;center&quot;, wrap_text=True)
+LEFT = Alignment(horizontal=&quot;left&quot;, vertical=&quot;center&quot;)
+THIN = Side(style=&quot;thin&quot;, color=&quot;BFBFBF&quot;)
+BORDER = Border(left=THIN, right=THIN, top=THIN, bottom=THIN)
+
+
+# ----------------------------- 工具函数 -----------------------------
+def detect_encoding(path):
+    &quot;&quot;&quot;尝试常见编码读取，优先正确解码中文 GBK。&quot;&quot;&quot;
+    for enc in (&quot;gbk&quot;, &quot;utf-8-sig&quot;, &quot;utf-8&quot;, &quot;latin-1&quot;):
+        try:
+            with open(path, encoding=enc) as f:
+                f.read(4096)
+            return enc
+        except UnicodeDecodeError:
+            continue
+    return &quot;utf-8&quot;
+
+
+def clean_sid(raw):
+    &quot;&quot;&quot;清洗学号：去掉反引号、空格等。&quot;&quot;&quot;
+    return (raw or &quot;&quot;).replace(&quot;`&quot;, &quot;&quot;).replace(&quot;&#x27;&quot;, &quot;&quot;).strip()
+
+
+def parse_score(raw_score):
+    &quot;&quot;&quot;从 &#x27;100 / 100.0%&#x27; 或 &#x27;100.0&#x27; 中解析出分数（数值）。&quot;&quot;&quot;
+    if raw_score is None:
+        return 0.0
+    m = re.search(r&quot;(\d+(?:\.\d+)?)\s*/&quot;, str(raw_score))
+    if m:
+        return float(m.group(1))
+    try:
+        return float(str(raw_score).strip())
+    except ValueError:
+        return 0.0
+
+
+def infer_sid(sid):
+    &quot;&quot;&quot;
+    解析学号，返回 (type, year)。
+      type: &#x27;undergrad&#x27; | &#x27;master&#x27; | &#x27;phd&#x27; | None(无法识别)
+      year: 4 位年份字符串，如 &#x27;2026&#x27;；无法识别为 None
+    规则（关键：本科与博士都以 &#x27;2&#x27; 开头，用 &#x27;20&#x27; 前缀优先区分）:
+      本科: 11位, 以 &#x27;20&#x27; 开头 -&gt; 前4位为年份
+      硕士: 11位, 以 &#x27;1&#x27;  开头 -&gt; &#x27;1&#x27;+4位年份+6位尾数
+      博士: 11位, 以 &#x27;2&#x27;  开头 -&gt; &#x27;2&#x27;+4位年份+6位尾数
+    &quot;&quot;&quot;
+    if not sid:
+        return None, None
+    if len(sid) == 11 and sid.startswith(&quot;20&quot;):
+        return &quot;undergrad&quot;, sid[0:4]
+    if len(sid) == 11 and sid.startswith(&quot;1&quot;):
+        return &quot;master&quot;, sid[1:5]
+    if len(sid) == 11 and sid.startswith(&quot;2&quot;):
+        return &quot;phd&quot;, sid[1:5]
+    return None, None
+
+
+def extract_target_year(folder_name):
+    &quot;&quot;&quot;从文件夹名称中提取目标年级年份，如 &#x27;2026级&#x27; -&gt; 2026。&quot;&quot;&quot;
+    m = re.search(r&quot;(\d{4})级&quot;, folder_name)
+    if m:
+        return int(m.group(1))
+    return 2026
+
+
+def norm_type_arg(t):
+    &quot;&quot;&quot;归一化类型参数。&quot;&quot;&quot;
+    t = (t or &quot;&quot;).strip()
+    if t in (&quot;undergrad&quot;, &quot;本科生&quot;, &quot;本科&quot;):
+        return &quot;undergrad&quot;
+    if t in (&quot;grad&quot;, &quot;研究生博士生&quot;, &quot;研究生&quot;, &quot;博士&quot;, &quot;研究生/博士生&quot;):
+        return &quot;grad&quot;
+    return None
+
+
+# ----------------------------- 核心处理 -----------------------------
+def process_exam(csv_path, exam_type, folder_name, out_root=None, pass_line=PASS_LINE):
+    &quot;&quot;&quot;
+    主处理函数。
+
+    返回 dict:
+        status: &#x27;ok&#x27; | &#x27;upload_error&#x27;
+        msg: 说明
+        out_dir: 输出文件夹绝对路径
+        stats: 统计摘要
+    &quot;&quot;&quot;
+    exam_type = norm_type_arg(exam_type)
+    if exam_type is None:
+        return {&quot;status&quot;: &quot;upload_error&quot;,
+                &quot;msg&quot;: &quot;类型参数错误，应为 &#x27;undergrad&#x27;(本科生) 或 &#x27;grad&#x27;(研究生博士生)。&quot;}
+    if not folder_name:
+        return {&quot;status&quot;: &quot;upload_error&quot;, &quot;msg&quot;: &quot;缺少输出文件夹名称。&quot;}
+    if not os.path.exists(csv_path):
+        return {&quot;status&quot;: &quot;upload_error&quot;, &quot;msg&quot;: f&quot;找不到文件：{csv_path}&quot;}
+
+    target_year = extract_target_year(folder_name)
+    declared_is_grad = (exam_type == &quot;grad&quot;)
+
+    # ---- 1. 读取 CSV ----
+    enc = detect_encoding(csv_path)
+    with open(csv_path, encoding=enc) as f:
+        reader = csv.reader(f)
+        rows = [r for r in reader if any(c.strip() for c in r)]
+    if not rows:
+        return {&quot;status&quot;: &quot;upload_error&quot;, &quot;msg&quot;: &quot;文件为空。&quot;}
+
+    header = rows[0]
+    # 列名映射（容错：包含关键字即可）
+    def find_col(*keys):
+        for i, h in enumerate(header):
+            for k in keys:
+                if k in (h or &quot;&quot;):
+                    return i
+        return None
+
+    i_name = find_col(&quot;姓名&quot;)
+    i_sid = find_col(&quot;学号&quot;)
+    i_college = find_col(&quot;学院&quot;)
+    i_status = find_col(&quot;状态&quot;)
+    i_score = find_col(&quot;成绩&quot;)
+    if i_score is None:
+        # 退而求其次：含 &#x27;百分比&#x27; 或 &#x27;得分率&#x27; 的列
+        i_score = find_col(&quot;百分比&quot;, &quot;得分率&quot;)
+    if None in (i_name, i_sid, i_college, i_score):
+        miss = [n for n, idx in ((&quot;姓名&quot;, i_name), (&quot;学号&quot;, i_sid),
+                                 (&quot;学院&quot;, i_college), (&quot;成绩&quot;, i_score)) if idx is None]
+        return {&quot;status&quot;: &quot;upload_error&quot;,
+                &quot;msg&quot;: f&quot;文件缺少必要列：{&#x27;, &#x27;.join(miss)}。请上传易班标准导出文件。&quot;}
+
+    # ---- 2. 逐行分类 ----
+    records = []          # 全部有效记录（含分类信息）
+    type_counter = {&quot;undergrad&quot;: 0, &quot;master&quot;: 0, &quot;phd&quot;: 0, &quot;none&quot;: 0}
+    for r in rows[1:]:
+        name = r[i_name].strip() if i_name &lt; len(r) else &quot;&quot;
+        sid_raw = r[i_sid] if i_sid &lt; len(r) else &quot;&quot;
+        college = (r[i_college].strip() if i_college &lt; len(r) else &quot;&quot;) or &quot;未知学院&quot;
+        status = (r[i_status].strip() if i_status is not None and i_status &lt; len(r) else &quot;&quot;)
+        # [对比验证] &quot;未开始/进行中&quot;人员成绩解析为 0，仍按未通过计入对应表，
+        # 与模板主流一致（模板全量主表纳入了 43/54 个未开始人员）。
+        # 经核对，模板与源文件批次不一致会&quot;漏&quot;掉个别未开始/已完成人员，
+        # 属模板侧数据缺失，程序按源文件完整计入，属正确行为，不在此排除。
+        pts = parse_score(r[i_score] if i_score &lt; len(r) else &quot;&quot;)
+        sid = clean_sid(sid_raw)
+        itype, year = infer_sid(sid)
+
+        rec = {
+            &quot;name&quot;: name, &quot;sid&quot;: sid, &quot;sid_raw&quot;: sid_raw,
+            &quot;college&quot;: college, &quot;status&quot;: status, &quot;pts&quot;: pts,
+            &quot;itype&quot;: itype, &quot;year&quot;: year,
+            &quot;is_grad&quot;: itype in (&quot;master&quot;, &quot;phd&quot;),
+            &quot;category&quot;: None, &quot;reason&quot;: &quot;&quot;,
+        }
+        type_counter[itype if itype else &quot;none&quot;] += 1
+
+        if itype is None:
+            rec[&quot;category&quot;] = &quot;format_error&quot;
+            rec[&quot;reason&quot;] = &quot;学号格式异常&quot;
+        # [对比验证] 以下分类规则已与标准模板&quot;问题表&quot;(39人)逐条核对一致：
+        #   硕/博 或 F… 格式异常 -&gt; cuo；本科且非目标年级 -&gt; retake；本科且目标年级 -&gt; valid。
+        # 模板曾把 6 名博士/F 人员同时误放入&quot;2026级本科生&quot;valid 表（重复列示），
+        # 此处只在 cuo 表，分类更规范、无重复，故保持原逻辑不动。
+        elif rec[&quot;is_grad&quot;] != declared_is_grad:
+            rec[&quot;category&quot;] = &quot;cuo&quot;
+            rec[&quot;reason&quot;] = (&quot;研究生/博士生错考本科生题目&quot;
+                             if rec[&quot;is_grad&quot;] else &quot;本科生错考研究生/博士生题目&quot;)
+        elif year == str(target_year):
+            rec[&quot;category&quot;] = &quot;valid&quot;
+        else:
+            rec[&quot;category&quot;] = &quot;retake&quot;
+        records.append(rec)
+
+    # ---- 3. 文件级校验（类型不符 -&gt; 上传错误）----
+    grad_n = type_counter[&quot;master&quot;] + type_counter[&quot;phd&quot;]
+    under_n = type_counter[&quot;undergrad&quot;]
+    if grad_n == 0 and under_n == 0:
+        return {&quot;status&quot;: &quot;upload_error&quot;,
+                &quot;msg&quot;: &quot;文件中没有可识别的学号，请检查上传文件是否为易班标准导出文件。&quot;}
+    # 以&quot;主导类型&quot;判断文件实际属于哪类考试
+    dominant_is_grad = grad_n &gt; under_n
+    if declared_is_grad != dominant_is_grad:
+        actual = &quot;研究生/博士生&quot; if dominant_is_grad else &quot;本科生&quot;
+        chosen = &quot;研究生博士生&quot; if declared_is_grad else &quot;本科生&quot;
+        return {&quot;status&quot;: &quot;upload_error&quot;,
+                &quot;msg&quot;: f&quot;文件类型与所选[{chosen}]不符：文件实际为[{actual}]考试文件&quot;
+                       f&quot;（识别到研究生/博士生 {grad_n} 人、本科生 {under_n} 人），&quot;
+                       f&quot;请重新选择类型或文件。&quot;}
+    if len(records) == 0:
+        return {&quot;status&quot;: &quot;upload_error&quot;, &quot;msg&quot;: &quot;文件中没有任何有效数据行。&quot;}
+
+    # ---- 4. 分组 ----
+    valid = [r for r in records if r[&quot;category&quot;] == &quot;valid&quot;]
+    retake = [r for r in records if r[&quot;category&quot;] == &quot;retake&quot;]
+    problem = [r for r in records if r[&quot;category&quot;] in (&quot;cuo&quot;, &quot;format_error&quot;)]
+
+    def sort_key(r):
+        return -r[&quot;pts&quot;]
+
+    valid.sort(key=sort_key)
+    retake.sort(key=sort_key)
+    problem.sort(key=sort_key)
+
+    # 分学院（仅本年有效）
+    by_college = {}
+    for r in valid:
+        by_college.setdefault(r[&quot;college&quot;], []).append(r)
+
+    # ---- 5. 写文件 ----
+    if out_root is None:
+        out_root = os.getcwd()
+    out_dir = os.path.join(out_root, folder_name)
+    att1 = os.path.join(out_dir, f&quot;附件1-{folder_name}-各学院通过率统计表&quot;)
+    att2 = os.path.join(out_dir, f&quot;附件2-{folder_name}-情况统计表&quot;)
+    os.makedirs(att1, exist_ok=True)
+    att2_college = os.path.join(att2, f&quot;01--{folder_name}-分学院&quot;)
+    os.makedirs(att2_college, exist_ok=True)
+
+    # 5a. 分学院：每个学院一个 xlsx，含 通过/未通过 两个 sheet
+    for college, recs in by_college.items():
+        passed = [r for r in recs if r[&quot;pts&quot;] &gt;= pass_line]
+        failed = [r for r in recs if r[&quot;pts&quot;] &lt; pass_line]
+        wb = _new_wb()
+        _fill_list_sheet(wb, &quot;通过&quot;, f&quot;{folder_name}通过名单&quot;, passed, has_problem=False)
+        _fill_list_sheet(wb, &quot;未通过&quot;, f&quot;{folder_name}未通过名单&quot;, failed, has_problem=False)
+        safe = re.sub(r&quot;[\\/:*?\&quot;&lt;&gt;|]&quot;, &quot;_&quot;, college)
+        wb.save(os.path.join(att2_college, f&quot;{folder_name}-{safe}-{EXAM_WORD}名单.xlsx&quot;))
+
+    # 5b. 往届补考名单（通过/未通过）
+    wb = _new_wb()
+    _fill_list_sheet(wb, &quot;通过&quot;, f&quot;{folder_name}往届补考通过名单&quot;,
+                     [r for r in retake if r[&quot;pts&quot;] &gt;= pass_line], has_problem=False)
+    _fill_list_sheet(wb, &quot;未通过&quot;, f&quot;{folder_name}往届补考未通过名单&quot;,
+                     [r for r in retake if r[&quot;pts&quot;] &lt; pass_line], has_problem=False)
+    wb.save(os.path.join(att2, f&quot;02-{folder_name}-往届补考名单.xlsx&quot;))
+
+    # 5c. 错考/问题名单（含 问题 列）
+    wb = _new_wb()
+    _fill_list_sheet(wb, &quot;问题&quot;, f&quot;{folder_name}问题名单&quot;, problem, has_problem=True)
+    wb.save(os.path.join(att2, f&quot;03-{folder_name}-错考名单.xlsx&quot;))
+
+    # 5d. 通过率统计表
+    _write_pass_rate(wb_path=os.path.join(att1, f&quot;01-{folder_name}-各学院通过率统计表.xlsx&quot;),
+                     records=records, folder_name=folder_name,
+                     target_year=target_year, pass_line=pass_line)
+
+    # ---- 6. 统计摘要 ----
+    stats = _build_stats(records, folder_name, target_year, pass_line)
+    return {
+        &quot;status&quot;: &quot;ok&quot;,
+        &quot;msg&quot;: &quot;处理完成&quot;,
+        &quot;out_dir&quot;: out_dir,
+        &quot;stats&quot;: stats,
+    }
+
+
+# ----------------------------- 写表辅助 -----------------------------
+def _new_wb():
+    &quot;&quot;&quot;新建 workbook 并去掉默认的空 Sheet。&quot;&quot;&quot;
+    wb = Workbook()
+    default = wb.sheetnames[0]
+    wb.remove(wb[default])
+    return wb
+
+
+def _fill_list_sheet(wb, sheet_name, title, recs, has_problem):
+    &quot;&quot;&quot;在 workbook 中写入一个 sheet（若已存在则复用，否则新建）。&quot;&quot;&quot;
+    if sheet_name in wb.sheetnames:
+        ws = wb[sheet_name]
+    else:
+        ws = wb.create_sheet(sheet_name)
+    ws.delete_rows(1, ws.max_row)  # 清空（仅新建的空白 sheet 无影响）
+
+    ncol = 5 if has_problem else 4
+    # 标题行
+    ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=ncol)
+    c = ws.cell(row=1, column=1, value=title)
+    c.font = TITLE_FONT
+    c.alignment = CENTER
+    c.fill = TITLE_FILL
+    # 表头
+    headers = COLS + ([&quot;问题&quot;] if has_problem else [])
+    for j, h in enumerate(headers, 1):
+        cell = ws.cell(row=2, column=j, value=h)
+        cell.font = HEAD_FONT
+        cell.fill = HEAD_FILL
+        cell.alignment = CENTER
+        cell.border = BORDER
+    # 数据
+    for i, r in enumerate(recs, start=3):
+        sid_val = r[&quot;sid&quot;]
+        try:
+            sid_val = int(sid_val)
+        except (ValueError, TypeError):
+            sid_val = r[&quot;sid&quot;] or &quot;&quot;
+        row_vals = [r[&quot;name&quot;], sid_val, r[&quot;college&quot;], int(r[&quot;pts&quot;])]
+        if has_problem:
+            row_vals.append(r[&quot;reason&quot;])
+        for j, v in enumerate(row_vals, 1):
+            cell = ws.cell(row=i, column=j, value=v)
+            cell.alignment = CENTER if j != 1 else LEFT
+            cell.border = BORDER
+    # 列宽
+    widths = [12, 16, 26, 8, 24] if has_problem else [12, 16, 26, 8]
+    for j, w in enumerate(widths, 1):
+        ws.column_dimensions[get_column_letter(j)].width = w
+    ws.freeze_panes = &quot;A3&quot;
+
+
+def _write_pass_rate(wb_path, records, folder_name, target_year, pass_line):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = &quot;Sheet1&quot;
+
+    # 两个群体：本科生 / 研究生博士生
+    blocks = [
+        (&quot;本科生&quot;, &quot;undergrad&quot;),
+        (&quot;研究生&quot;, &quot;grad&quot;),   # 研究生博士生群体（硕+博）
+                              # [对比验证] 当本次文件为本科生考试时，研究生全量不在此文件，
+                              # pool_for(&quot;grad&quot;) 仅含被错考的硕/博（已归 cuo，被下方 continue 跳过），
+                              # 故研究生块为空，与模板&quot;双块&quot;结构对齐（模板研究生块来自另一研究生CSV）。
+    ]
+
+    def pool_for(pop):
+        &quot;&quot;&quot;参加考试池：该群体且非错考/非格式异常（即 valid+retake）。&quot;&quot;&quot;
+        out = []
+        for r in records:
+            if r[&quot;category&quot;] in (&quot;cuo&quot;, &quot;format_error&quot;):
+                continue
+            if pop == &quot;undergrad&quot; and r[&quot;itype&quot;] == &quot;undergrad&quot;:
+                out.append(r)
+            elif pop == &quot;grad&quot; and r[&quot;itype&quot;] in (&quot;master&quot;, &quot;phd&quot;):
+                out.append(r)
+        return out
+
+    def stats_of(pool):
+        total = len(pool)
+        p = sum(1 for r in pool if r[&quot;pts&quot;] &gt;= pass_line)
+        f = total - p
+        rate = (p / total) if total else 0
+        return [total, p, f, rate]
+
+    row = 1
+    # 总标题
+    ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=8)
+    c = ws.cell(row=row, column=1, value=&quot;考试统计&quot;)
+    c.font = TITLE_FONT
+    c.alignment = CENTER
+    c.fill = TITLE_FILL
+    row += 1
+
+    for label, pop in blocks:
+        pool = pool_for(pop)
+        g1 = stats_of(pool)                       # 参加考试（含往届补考）
+        g2 = stats_of([r for r in pool if r[&quot;year&quot;] == str(target_year)])  # 仅本年
+
+        # 第二行：左 &quot;参加考试&quot; / 右 &quot;2026级X考试统计&quot;
+        ws.cell(row=row, column=1, value=&quot;参加考试&quot;).font = HEAD_FONT
+        ws.cell(row=row, column=1).fill = HEAD_FILL
+        ws.cell(row=row, column=5,
+                value=f&quot;{target_year}级{label}考试统计&quot;).font = HEAD_FONT
+        ws.cell(row=row, column=5).fill = HEAD_FILL
+        for col in (1, 5):
+            ws.cell(row=row, column=col).alignment = CENTER
+        row += 1
+
+        # 第三行：表头
+        head = [&quot;总人数&quot;, &quot;通过&quot;, &quot;未通过&quot;, &quot;通过率&quot;] * 2
+        for j, h in enumerate(head, 1):
+            cell = ws.cell(row=row, column=j, value=h)
+            cell.font = HEAD_FONT
+            cell.fill = HEAD_FILL
+            cell.alignment = CENTER
+            cell.border = BORDER
+        row += 1
+
+        # 第四行：数据
+        data = g1[:3] + [g1[3]] + g2[:3] + [g2[3]]
+        for j, v in enumerate(data, 1):
+            cell = ws.cell(row=row, column=j, value=v)
+            cell.alignment = CENTER
+            cell.border = BORDER
+            if j in (4, 8):
+                cell.number_format = &quot;0.00%&quot;
+        row += 1
+        row += 1  # 空行
+
+    for j, w in enumerate([10, 9, 9, 11, 10, 9, 9, 11], 1):
+        ws.column_dimensions[get_column_letter(j)].width = w
+    wb.save(wb_path)
+
+
+def _build_stats(records, folder_name, target_year, pass_line):
+    valid = [r for r in records if r[&quot;category&quot;] == &quot;valid&quot;]
+    retake = [r for r in records if r[&quot;category&quot;] == &quot;retake&quot;]
+    problem = [r for r in records if r[&quot;category&quot;] in (&quot;cuo&quot;, &quot;format_error&quot;)]
+    n_valid = len(valid)
+    n_pass = sum(1 for r in valid if r[&quot;pts&quot;] &gt;= pass_line)
+    return {
+        &quot;folder_name&quot;: folder_name,
+        &quot;target_year&quot;: target_year,
+        &quot;pass_line&quot;: pass_line,
+        &quot;总记录数&quot;: len(records),
+        &quot;本年有效&quot;: n_valid,
+        &quot;本年有效-通过&quot;: n_pass,
+        &quot;本年有效-未通过&quot;: n_valid - n_pass,
+        &quot;本年有效通过率&quot;: (n_pass / n_valid) if n_valid else 0,
+        &quot;往届补考&quot;: len(retake),
+        &quot;错考/格式异常&quot;: len(problem),
+        &quot;学院数&quot;: len({r[&quot;college&quot;] for r in valid}),
+        &quot;错考明细&quot;: [(r[&quot;name&quot;], r[&quot;sid&quot;], r[&quot;college&quot;], int(r[&quot;pts&quot;]), r[&quot;reason&quot;])
+                    for r in problem],
+    }
+
+
+# ----------------------------- CLI -----------------------------
+def main():
+    ap = argparse.ArgumentParser(description=&quot;校纪校规考试成绩汇总转换&quot;)
+    ap.add_argument(&quot;--csv&quot;, required=True, help=&quot;输入 CSV 文件路径&quot;)
+    ap.add_argument(&quot;--type&quot;, required=True, choices=[&quot;undergrad&quot;, &quot;grad&quot;],
+                    help=&quot;undergrad=本科生, grad=研究生博士生&quot;)
+    ap.add_argument(&quot;--folder&quot;, required=True, help=&quot;输出文件夹名称&quot;)
+    ap.add_argument(&quot;--out&quot;, default=None, help=&quot;输出根目录（默认当前目录）&quot;)
+    ap.add_argument(&quot;--pass-line&quot;, type=int, default=PASS_LINE, help=&quot;通过分数线&quot;)
+    args = ap.parse_args()
+
+    res = process_exam(args.csv, args.type, args.folder,
+                       out_root=args.out, pass_line=args.pass_line)
+    if res[&quot;status&quot;] == &quot;upload_error&quot;:
+        print(&quot;【上传错误】&quot;, res[&quot;msg&quot;])
+        return
+    print(&quot;【处理完成】&quot;, res[&quot;msg&quot;])
+    print(&quot;输出文件夹:&quot;, res[&quot;out_dir&quot;])
+    s = res[&quot;stats&quot;]
+    print(f&quot;总记录 {s[&#x27;总记录数&#x27;]} | 本年有效 {s[&#x27;本年有效&#x27;]} &quot;
+          f&quot;(通过 {s[&#x27;本年有效-通过&#x27;]}/未通过 {s[&#x27;本年有效-未通过&#x27;]}, &quot;
+          f&quot;通过率 {s[&#x27;本年有效通过率&#x27;]*100:.2f}%) | &quot;
+          f&quot;往届补考 {s[&#x27;往届补考&#x27;]} | 错考/异常 {s[&#x27;错考/格式异常&#x27;]} | &quot;
+          f&quot;学院数 {s[&#x27;学院数&#x27;]}&quot;)
+    if s[&quot;错考明细&quot;]:
+        print(&quot;错考/异常名单:&quot;)
+        for d in s[&quot;错考明细&quot;]:
+            print(&quot;   &quot;, d)
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+            </div>
+            <p class="note" style="margin-top:12px;">代码区可上下滚动查看完整实现；程序只读取本地 CSV，不上传任何数据。</p>
+        </div>
+    </section>
+
+    <!-- 说明 -->
+    <section class="data-section" id="notes">
+        <div class="container px-4 px-lg-5">
+            <div class="section-head">
+                <h2>说明</h2>
+            </div>
+            <div class="notes-grid">
+                <div class="note-card">
+                    <h3>数据来源</h3>
+                    <p>基于考试系统导出的完成报告（ExamCompletionReport）整理，页面仅展示<strong>聚合统计与脱敏示例</strong>，不含任何个人隐私信息。</p>
+                </div>
+                <div class="note-card">
+                    <h3>统计口径</h3>
+                    <p>每题 2 分、满分 100 分，<strong>≥90 分及格</strong>；2026 级研究生/博士生为有效口径，往届与错考单独成表。</p>
+                </div>
+                <div class="note-card">
+                    <h3>页面模板</h3>
+                    <p>基于 GitHub 开源模板 <strong>Start Bootstrap · Clean Blog</strong>（MIT License）改造，响应式布局，适配桌面与移动端。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="border-top">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <div class="small text-center text-muted fst-italic">
+                        校纪校规考试成绩 · 数据整理前后对比 &nbsp;|&nbsp; 模板：Start Bootstrap Clean Blog (MIT) &nbsp;|&nbsp; 2026-10
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 核心 JS（导航折叠） -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <!-- 模板脚本（导航滚动收缩） -->
+    <script src="js/scripts.js"></script>
+    <!-- 代码高亮（本地） -->
+    <script src="js/highlight.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        if (window.hljs) { hljs.highlightAll(); }
+        var btn = document.getElementById('copyBtn');
+        if (!btn) return;
+        btn.addEventListener('click', function () {
+          var code = document.getElementById('srcCode');
+          var text = code ? code.textContent : '';
+          function done() { btn.textContent = '已复制'; setTimeout(function () { btn.textContent = '复制代码'; }, 1500); }
+          function fallback() {
+            var ta = document.createElement('textarea');
+            ta.value = text; document.body.appendChild(ta); ta.select();
+            try { document.execCommand('copy'); } catch (e) {}
+            ta.remove(); done();
+          }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done).catch(fallback);
+          } else { fallback(); }
+        });
+      });
+    </script>
+</body>
+</html>
